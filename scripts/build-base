@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")/.."
+
+build_base() {
+  name="$1"
+  echo "Building docker-lisp/$name..."
+  ./scripts/build "bases/$name"
+}
+
+build_base base-racket
+build_base base-call

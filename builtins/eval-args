@@ -1,0 +1,12 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  args="$1"; \
+  is_empty=$(run atom-p "$args"); \
+  if [ "$is_empty" = "#t" ]; then \
+    exit 0; \
+  fi; \
+  first=$(run car "$args"); \
+  rest=$(run cdr "$args"); \
+  evaled=$(run eval "$first"); \
+  rest_evaled=$(run eval-args "$rest"); \
+  echo "$evaled $rest_evaled"'

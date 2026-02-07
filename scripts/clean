@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Usage: ./scripts/clean"
+  echo "Remove all docker-lisp images and kill running containers"
+  exit 0
+fi
+
+echo "Killing running docker-lisp containers..."
+docker ps -q --filter "ancestor=docker-lisp/*" | xargs -r docker kill 2>/dev/null || true
+
+echo "Removing docker-lisp images..."
+docker images -q "docker-lisp/*" | xargs -r docker rmi -f 2>/dev/null || true
+
+echo "Done!"

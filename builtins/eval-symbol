@@ -1,0 +1,2 @@
+FROM docker-lisp/base-call
+ENV CMD='echo "eval-symbol not implemented" >&2; exit 1'

@@ -1,0 +1,3 @@
+bases/* linguist-language=Dockerfile
+builtins/* linguist-language=Dockerfile
+tests/* linguist-language=Dockerfile

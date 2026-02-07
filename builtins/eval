@@ -1,0 +1,10 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  is_atom=$(run atom-p "$1"); \
+  if [ "$is_atom" = "#t" ]; then \
+    run eval-atom "$1"; \
+  else \
+    fn=$(run car "$1"); \
+    args=$(run cdr "$1"); \
+    run apply "$fn" "$args"; \
+  fi'

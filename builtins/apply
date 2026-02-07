@@ -1,0 +1,11 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  fn="$1"; \
+  args="$2"; \
+  is_special=$(run special-form-p "$fn"); \
+  if [ "$is_special" = "#t" ]; then \
+    run "$fn" "$args"; \
+  else \
+    evaluated=$(run eval-args "$args"); \
+    run "$fn" $evaluated; \
+  fi'

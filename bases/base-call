@@ -1,0 +1,4 @@
+FROM --platform=linux/amd64 docker:cli
+COPY scripts/run /usr/local/bin/run
+RUN chmod +x /usr/local/bin/run
+ENTRYPOINT ["sh", "-c", "sh -c \"$CMD\" -- \"$@\"", "--"]

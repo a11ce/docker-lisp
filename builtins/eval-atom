@@ -1,0 +1,13 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  is_number=$(run number-p "$1"); \
+  if [ "$is_number" = "#t" ]; then \
+    echo "$1"; \
+  else \
+    is_string=$(run string-p "$1"); \
+    if [ "$is_string" = "#t" ]; then \
+      echo "$1"; \
+    else \
+      run eval-symbol "$1"; \
+    fi; \
+  fi'

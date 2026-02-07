@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")/.."
+
+# Ensure base images exist
+for base in base-racket base-call; do
+  if ! docker image inspect "docker-lisp/$base" > /dev/null 2>&1; then
+    ./scripts/build-base
+    break
+  fi
+done
+
+echo "Building builtins..."
+for dockerfile in builtins/*; do
+  [ -f "$dockerfile" ] || continue
+  name=$(basename "$dockerfile")
+  echo "  $name"
+  ./scripts/build "$dockerfile"
+done
+
+echo "Done!"

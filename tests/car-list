@@ -1,3 +1,0 @@
-FROM docker-lisp/car
-LABEL expected="1"
-CMD ["(1 2 3)"]

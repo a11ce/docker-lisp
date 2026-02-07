@@ -1,2 +1,2 @@
 FROM docker-lisp/base-racket
-ENV CMD="racket -e '(displayln (port->list read))'"
+ENV CMD="racket -e '(writeln (port->list read))'"

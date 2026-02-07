@@ -1,3 +1,3 @@
-FROM docker-lisp/car
-LABEL expected="(a b)"
-CMD ["((a b) c d)"]
+FROM docker-lisp/eval
+LABEL expected="(1 2)"
+CMD ["(car (list (list 1 2) 3 4))"]

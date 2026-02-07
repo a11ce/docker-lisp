@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+trap 'exit 130' INT
+
+cd "$(dirname "$0")/.."
+
+trace=1
+rebuild_base=""
+for arg in "$@"; do
+  case "$arg" in
+    --rebuild-base) rebuild_base=1 ;;
+    --no-trace) trace="" ;;
+  esac
+done
+
+# Rebuild base if requested
+[ -n "$rebuild_base" ] && ./scripts/build-base
+
+# Always rebuild builtins to test current code
+./scripts/build-builtins
+
+passed=0
+failed=0
+
+for dockerfile in tests/*; do
+  [ -f "$dockerfile" ] || continue
+  name=$(basename "$dockerfile")
+
+  echo -n "Testing $name... "
+  [ -n "$trace" ] && echo ""
+
+  # Build the test image
+  ./scripts/build "$dockerfile" "test/$name"
+
+  # Run and capture output
+  if [ -n "$trace" ]; then
+    result=$(TRACE=1 ./scripts/run "test/$name")
+  else
+    result=$(./scripts/run "test/$name" 2>/dev/null)
+  fi
+
+  # Get expected value from label
+  expected=$(docker inspect --format '{{ index .Config.Labels "expected" }}' "docker-lisp/test/$name")
+
+  if [ "$result" = "$expected" ]; then
+    echo "PASS"
+    ((passed++))
+  else
+    echo "FAIL (expected '$expected', got '$result')"
+    ((failed++))
+  fi
+
+  # Clean up test image
+  docker rmi "docker-lisp/test/$name" > /dev/null 2>&1 || true
+done
+
+echo ""
+echo "Results: $passed passed, $failed failed"
+
+if [ $failed -gt 0 ]; then
+  exit 1
+fi

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+trap 'exit 130' INT
+
+# Parse --trace flag (must be first arg)
+if [ "$1" = "--trace" ]; then
+  TRACE=1
+  shift
+fi
+
+if [ -z "$1" ]; then
+  echo "Usage: ./scripts/run [--trace] <image> [args...]"
+  echo "Run docker-lisp/<image> with optional tracing"
+  exit 1
+fi
+
+d=${DEPTH:-0}
+indent=$(printf "%*s" $((d*2)) "" | sed "s/  /│ /g")
+
+[ -n "$TRACE" ] && printf "\033[90m%s┌ %s\033[0m\n" "$indent" "$*" >&2
+
+result=$(docker run --rm --init --platform=linux/amd64 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e TRACE="$TRACE" \
+  -e DEPTH=$((d+1)) \
+  "docker-lisp/$@")
+
+[ -n "$TRACE" ] && printf "\033[90m%s└ %s\033[0m\n" "$indent" "$result" >&2
+
+echo "$result"
