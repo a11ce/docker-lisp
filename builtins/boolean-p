@@ -1,0 +1,2 @@
+FROM docker-lisp/base-call
+ENV CMD='if [ "$1" = "#t" ] || [ "$1" = "#f" ]; then echo "#t"; else echo "#f"; fi'

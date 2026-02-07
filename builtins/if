@@ -1,0 +1,11 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  cond=$(run car "$1"); \
+  then_branch=$(run car "$(run cdr "$1")"); \
+  else_branch=$(run car "$(run cdr "$(run cdr "$1")")"); \
+  result=$(run eval "$cond"); \
+  if [ "$result" = "#f" ]; then \
+    run eval "$else_branch"; \
+  else \
+    run eval "$then_branch"; \
+  fi'
