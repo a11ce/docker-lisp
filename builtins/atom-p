@@ -1,0 +1,2 @@
+FROM docker-lisp/base-racket
+ENV CMD="racket -e '(displayln (if (pair? (read)) (quote false) (quote true)))'"

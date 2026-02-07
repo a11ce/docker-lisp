@@ -1,0 +1,3 @@
+FROM docker-lisp/string-p
+LABEL expected="true"
+CMD ["\"meow\""]

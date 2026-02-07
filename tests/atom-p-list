@@ -1,0 +1,3 @@
+FROM docker-lisp/atom-p
+LABEL expected="false"
+CMD ["(+ 1 2)"]
