@@ -1,0 +1,2 @@
+FROM docker-lisp/base-racket
+ENV CMD="racket -e '(displayln (cdr (read)))'"

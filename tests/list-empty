@@ -1,0 +1,3 @@
+FROM docker-lisp/list
+LABEL expected="()"
+CMD []
