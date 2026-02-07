@@ -1,0 +1,2 @@
+FROM docker-lisp/base-call
+ENV CMD='run car "$1"'

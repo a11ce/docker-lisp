@@ -61,4 +61,4 @@ Then run with
 | `build-builtins` | Build all builtin images |
 | `run [--trace] <image> [args]` | Run a `docker-lisp/<image>` container |
 | `run-tests [--no-trace] [--rebuild-base]` | Run the tests (with traces by default) |
-| `clean` | Remove all `docker-lisp/*` images |
+| `clean` | Kill all `docker-lisp/*` containers and remove all built `docker-lisp/*` images |

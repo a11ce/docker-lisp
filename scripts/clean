@@ -8,7 +8,7 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 fi
 
 echo "Killing running docker-lisp containers..."
-docker ps -q --filter "ancestor=docker-lisp/*" | xargs -r docker kill 2>/dev/null || true
+docker ps --format '{{.ID}} {{.Image}}' | grep 'docker-lisp/' | awk '{print $1}' | xargs -r docker kill 2>/dev/null || true
 
 echo "Removing docker-lisp images..."
 docker images -q "docker-lisp/*" | xargs -r docker rmi -f 2>/dev/null || true
