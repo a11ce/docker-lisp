@@ -60,5 +60,5 @@ Then run with
 | `build-base` | Build base images (`docker-lisp/base-racket`, `docker-lisp/base-call`) |
 | `build-builtins` | Build all builtin images |
 | `run [--trace] <image> [args]` | Run a `docker-lisp/<image>` container |
-| `run-tests [--no-trace] [--rebuild-base]` | Run the tests (with traces by default) |
+| `run-tests [--no-trace] [--rebuild-base] [prefix filter]` | Run the tests (with traces by default) |
 | `clean` | Kill all `docker-lisp/*` containers and remove all built `docker-lisp/*` images |

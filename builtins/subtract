@@ -1,0 +1,2 @@
+FROM docker-lisp/base-bash
+ENV CMD='awk "BEGIN {print $1 - $2}"'

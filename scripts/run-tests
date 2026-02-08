@@ -7,10 +7,13 @@ cd "$(dirname "$0")/.."
 
 trace=1
 rebuild_base=""
+filter=""
 for arg in "$@"; do
   case "$arg" in
     --rebuild-base) rebuild_base=1 ;;
     --no-trace) trace="" ;;
+    -*) echo "Unknown option: $arg"; exit 1 ;;
+    *) filter="$arg" ;;
   esac
 done
 
@@ -26,6 +29,9 @@ failed=0
 for dockerfile in tests/*; do
   [ -f "$dockerfile" ] || continue
   name=$(basename "$dockerfile")
+
+  # Skip if filter specified and name doesn't match
+  [ -n "$filter" ] && [[ "$name" != "$filter"* ]] && continue
 
   echo -n "Testing $name... "
   [ -n "$trace" ] && echo ""

@@ -1,0 +1,3 @@
+FROM docker-lisp/eval
+LABEL expected="#f"
+CMD ["(number-equals 5 3)"]
