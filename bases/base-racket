@@ -1,2 +1,0 @@
-FROM --platform=linux/amd64 racket/racket:8.18
-ENTRYPOINT ["sh", "-c", "echo \"$*\" | sh -c \"$CMD\"", "--"]

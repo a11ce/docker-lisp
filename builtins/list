@@ -1,2 +1,2 @@
-FROM docker-lisp/base-racket
-ENV CMD="racket -e '(writeln (port->list read))'"
+FROM docker-lisp/base-bash
+ENV CMD='echo "($*)"'

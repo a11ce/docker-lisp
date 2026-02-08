@@ -1,2 +1,2 @@
-FROM docker-lisp/base-racket
-ENV CMD="racket -e '(writeln (cdr (read)))'"
+FROM docker-lisp/base-chicken
+ENV CMD="(write (cdr (read)))"

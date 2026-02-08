@@ -1,2 +1,2 @@
-FROM docker-lisp/base-racket
-ENV CMD="racket -e '(displayln (and (member (read) (quote (if define lambda quote))) #t))'"
+FROM docker-lisp/base-bash
+ENV CMD='case "$1" in if|define|lambda|quote) echo "#t" ;; *) echo "#f" ;; esac'

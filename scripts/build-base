@@ -9,5 +9,6 @@ build_base() {
   ./scripts/build "bases/$name"
 }
 
-build_base base-racket
 build_base base-call
+build_base base-bash
+build_base base-chicken

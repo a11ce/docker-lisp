@@ -1,0 +1,2 @@
+FROM --platform=linux/amd64 plotter/chicken-scheme:latest-alpine
+ENTRYPOINT ["sh", "-c", "echo \"$*\" | csi -q -e \"$CMD (newline)\"", "--"]
