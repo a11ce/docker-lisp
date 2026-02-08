@@ -2,15 +2,18 @@
 
 trap 'exit 130' INT
 
-# Parse --trace flag (must be first arg)
-if [ "$1" = "--trace" ]; then
-  TRACE=1
-  shift
-fi
+# Parse flags
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --trace) TRACE=1; shift ;;
+    --no-cleanup) NO_CLEANUP=1; shift ;;
+    *) break ;;
+  esac
+done
 
 if [ -z "$1" ]; then
-  echo "Usage: ./scripts/run [--trace] <image> [args...]"
-  echo "Run docker-lisp/<image> with optional tracing"
+  echo "Usage: ./scripts/run [--trace] [--no-cleanup] <image> [args...]"
+  echo "Run docker-lisp/<image> with optional tracing and cleanup control"
   exit 1
 fi
 
@@ -52,7 +55,7 @@ result=$(docker run --rm --init --platform=linux/amd64 \
 echo "$result"
 
 # Cleanup runtime at top level
-if [ "$d" = "0" ]; then
+if [ "$d" = "0" ] && [ -z "$NO_CLEANUP" ]; then
   rm -rf "$RUNTIME_HOST"/* 2>/dev/null
   docker images -q 'docker-lisp/runtime/*' 2>/dev/null | xargs -r docker rmi -f >/dev/null 2>&1
 fi

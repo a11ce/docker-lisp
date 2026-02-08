@@ -32,10 +32,12 @@ Pass `--trace` to `run` to see all calls.
 ./scripts/run --trace eval "(car (cdr (cons 1 (cons 2 (list)))))"
 ```
 
+You can also use `docker stats` and `docker events` to watch evaluation.
+
 You can write programs:
 ```dockerfile
 FROM docker-lisp/eval
-CMD ["(car (cdr (list 1 2 3 4 5)))"]
+CMD ["(define fact (lambda (n) (if (number-equals n 0) 1 (multiply n (fact (subtract n 1))))))", "(fact 3)"]
 ```
 
 Build them with
@@ -59,6 +61,6 @@ Then run with
 | `build <file> [name]` | Build a Dockerfile into `docker-lisp/<name>`. Defaults to basename. |
 | `build-base` | Build base images (`docker-lisp/base-racket`, `docker-lisp/base-call`) |
 | `build-builtins` | Build all builtin images |
-| `run [--trace] <image> [args]` | Run a `docker-lisp/<image>` container |
+| `run [--trace] [--no-cleanup] <image> [args]` | Run a `docker-lisp/<image>` container |
 | `run-tests [--no-trace] [--rebuild-base] [prefix filter]` | Run the tests (with traces by default) |
 | `clean` | Kill all `docker-lisp/*` containers and remove all built `docker-lisp/*` images |
