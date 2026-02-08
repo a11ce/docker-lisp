@@ -16,7 +16,7 @@ for dockerfile in builtins/*; do
   [ -f "$dockerfile" ] || continue
   name=$(basename "$dockerfile")
   echo "  $name"
-  ./scripts/build "$dockerfile"
+  ./scripts/build -q "$dockerfile"
 done
 
 echo "Done!"

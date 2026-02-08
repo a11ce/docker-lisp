@@ -6,9 +6,10 @@ cd "$(dirname "$0")/.."
 build_base() {
   name="$1"
   echo "Building docker-lisp/$name..."
-  ./scripts/build "bases/$name"
+  ./scripts/build -q "bases/$name"
 }
 
 build_base base-call
 build_base base-bash
 build_base base-chicken
+build_base lambda-base

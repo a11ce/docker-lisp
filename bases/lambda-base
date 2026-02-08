@@ -1,0 +1,4 @@
+FROM docker-lisp/base-call
+COPY builtins/internal/lambda /lambda
+RUN chmod +x /lambda
+ENV CMD='/lambda "$@"'

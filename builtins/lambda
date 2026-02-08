@@ -1,0 +1,13 @@
+FROM docker-lisp/base-call
+ENV CMD='\
+  params=$(run car "$1"); \
+  body=$(run car "$(run cdr "$1")"); \
+  id=$(head -c 6 /dev/urandom | xxd -p); \
+  name="runtime/lambda-$id"; \
+  dockerfile="/runtime/lambda-$id"; \
+  echo "FROM docker-lisp/lambda-base" > "$dockerfile"; \
+  echo "ENV PARAMS=\"$params\"" >> "$dockerfile"; \
+  echo "ENV BODY=\"$body\"" >> "$dockerfile"; \
+  echo "ENV CAPTURED_SCOPE=\"$SCOPE_PATH\"" >> "$dockerfile"; \
+  docker build --platform=linux/amd64 -q -t "docker-lisp/$name" -f "$dockerfile" /tmp > /dev/null; \
+  echo "$name"'

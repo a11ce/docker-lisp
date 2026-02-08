@@ -1,0 +1,4 @@
+FROM docker-lisp/base-call
+COPY builtins/internal/define /define
+RUN chmod +x /define
+ENV CMD='/define "$@"'

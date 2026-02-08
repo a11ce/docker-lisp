@@ -1,2 +1,18 @@
 FROM docker-lisp/base-call
-ENV CMD='echo "eval-symbol not implemented" >&2; exit 1'
+ENV CMD='\
+  name="$1"; \
+  scope="$SCOPE_PATH"; \
+  while true; do \
+    if [ -f "$scope/$name" ]; then \
+      docker build --platform=linux/amd64 -q -t "docker-lisp/runtime/binding-$name" -f "$scope/$name" /tmp > /dev/null; \
+      run "runtime/binding-$name"; \
+      exit 0; \
+    fi; \
+    if [ "$scope" = "/runtime" ]; then break; fi; \
+    scope=$(dirname "$scope"); \
+  done; \
+  if docker image inspect "docker-lisp/$name" > /dev/null 2>&1; then \
+    echo "$name"; \
+    exit 0; \
+  fi; \
+  echo "undefined symbol: $name" >&2; exit 1'

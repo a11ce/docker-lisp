@@ -1,0 +1,3 @@
+FROM docker-lisp/eval
+
+CMD ["(define fact (lambda (n) (if (number-equals n 0) 1 (multiply n (fact (subtract n 1))))))", "(fact 3)"]

@@ -1,11 +1,17 @@
 FROM docker-lisp/base-call
 ENV CMD='\
-  fn="$1"; \
+  fn_expr="$1"; \
   args="$2"; \
-  is_special=$(run special-form-p "$fn"); \
-  if [ "$is_special" = "#t" ]; then \
-    run "$fn" "$args"; \
+  fn_is_atom=$(run atom-p "$fn_expr"); \
+  if [ "$fn_is_atom" = "#t" ]; then \
+    is_special=$(run special-form-p "$fn_expr"); \
   else \
+    is_special="#f"; \
+  fi; \
+  if [ "$is_special" = "#t" ]; then \
+    run "$fn_expr" "$args"; \
+  else \
+    fn=$(run eval "$fn_expr"); \
     evaluated=$(run eval-args "$args"); \
     run "$fn" $evaluated; \
   fi'

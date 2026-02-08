@@ -32,8 +32,17 @@ indent=$(printf "%*s" $((d*2)) "" | sed "s/  /│ /g")
 
 [ -n "$TRACE" ] && printf "\033[90m%s┌ %s\033[0m\n" "$indent" "$*" >&2
 
+# Top level: compute host runtime path. Nested: use inherited RUNTIME_HOST.
+if [ -z "$RUNTIME_HOST" ]; then
+  RUNTIME_HOST="$(cd "$(dirname "$0")/.." && pwd)/runtime"
+  mkdir -p "$RUNTIME_HOST"
+fi
+
 result=$(docker run --rm --init --platform=linux/amd64 \
   -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "$RUNTIME_HOST:/runtime" \
+  -e RUNTIME_HOST="$RUNTIME_HOST" \
+  -e SCOPE_PATH="${SCOPE_PATH:-/runtime}" \
   -e TRACE="$TRACE" \
   -e DEPTH=$((d+1)) \
   "docker-lisp/$@")
@@ -41,3 +50,10 @@ result=$(docker run --rm --init --platform=linux/amd64 \
 [ -n "$TRACE" ] && printf "\033[90m%s└ %s\033[0m\n" "$indent" "$result" >&2
 
 echo "$result"
+
+# Cleanup runtime at top level
+if [ "$d" = "0" ]; then
+  rm -rf "$RUNTIME_HOST"/* 2>/dev/null
+  docker images -q 'docker-lisp/runtime/*' 2>/dev/null | xargs -r docker rmi -f >/dev/null 2>&1
+fi
+

@@ -1,0 +1,21 @@
+#!/bin/sh
+# runs a lambda
+
+sid=$(head -c 6 /dev/urandom | xxd -p)
+new_scope="$CAPTURED_SCOPE/scope-$sid"
+mkdir -p "$new_scope"
+
+p="$PARAMS"
+
+while [ "$(run atom-p "$p")" != "#t" ]; do
+  pname=$(run car "$p")
+  aval="$1"
+  shift
+
+  echo "FROM docker-lisp/base-bash" > "$new_scope/$pname"
+  echo "ENV CMD='echo \"$aval\"'" >> "$new_scope/$pname"
+
+  p=$(run cdr "$p")
+done
+
+SCOPE_PATH="$new_scope" run eval "$BODY"

@@ -1,8 +1,13 @@
 #!/bin/sh
 set -e
 
+if [ "$1" = "-q" ]; then
+  quiet=1
+  shift
+fi
+
 if [ -z "$1" ]; then
-  echo "Usage: ./scripts/build <file> [image-name]"
+  echo "Usage: ./scripts/build [-q] <file> [image-name]"
   echo "Build a dockerfile into docker-lisp/<image-name>"
   echo "If image-name is omitted, uses the filename"
   exit 1
@@ -12,3 +17,5 @@ file="$1"
 name="${2:-$(basename "$file")}"
 
 docker build --platform=linux/amd64 --provenance=false -q -t "docker-lisp/$name" -f "$file" . > /dev/null
+[ -z "$quiet" ] && echo "Built $name"
+exit 0
