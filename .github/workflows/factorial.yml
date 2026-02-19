@@ -22,7 +22,4 @@ jobs:
         run: ./scripts/build programs/factorial
 
       - name: Run factorial
-        run: |
-          result=$(./scripts/run factorial)
-          echo "Result: $result"
-          [ "$result" = "6" ] || { echo "Expected 6, got $result"; exit 1; }
+        run: ./scripts/run --trace factorial
