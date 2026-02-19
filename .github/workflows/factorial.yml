@@ -1,0 +1,28 @@
+name: Run factorial
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  factorial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build base images
+        run: ./scripts/build-base
+
+      - name: Build builtins
+        run: ./scripts/build-builtins
+
+      - name: Build factorial program
+        run: ./scripts/build programs/factorial
+
+      - name: Run factorial
+        run: |
+          result=$(./scripts/run factorial)
+          echo "Result: $result"
+          [ "$result" = "6" ] || { echo "Expected 6, got $result"; exit 1; }
