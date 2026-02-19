@@ -2,6 +2,8 @@
 
 A Docker image is a piece of executable code that produces some output given some input.
 
+![Screenshot of a program trace, docker events, and docker stats..](./screenshot.png)
+
 ## Requirements
 
 - Docker
